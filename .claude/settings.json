@@ -1,0 +1,10 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://localhost:20128/v1",
+    "ANTHROPIC_API_KEY": "sk_9router",
+    "CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT": "1"
+  },
+  "model": "oc",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "auto"
+}

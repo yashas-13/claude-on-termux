@@ -1,0 +1,15 @@
+# >>> claude-code-termux-tmpdir >>>
+# Keep interactive shells aligned with the Termux TMPDIR workaround.
+if [ -n "${PREFIX:-}" ] && [ -d "$PREFIX/tmp" ]; then
+    export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
+    export CLAUDE_CODE_TMPDIR="${CLAUDE_CODE_TMPDIR:-$TMPDIR}"
+    export CLAUDE_TMPDIR="${CLAUDE_TMPDIR:-$TMPDIR/claude}"
+fi
+# <<< claude-code-termux-tmpdir <<<
+
+# >>> cc-termux PATH >>>
+case ":$PATH:" in
+    *":$HOME/.local/bin:"*) ;;
+    *) export PATH="$HOME/.local/bin:$PATH" ;;
+esac
+# <<< cc-termux PATH <<<

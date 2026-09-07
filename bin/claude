@@ -1,0 +1,26 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+# Termux glibc wrapper for claude — routes through ld.so like node wrapper does.
+PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
+LDSO="$PREFIX/glibc/lib/ld-linux-aarch64.so.1"
+LIBPATH="$PREFIX/glibc/lib"
+# Prefer installed native bin; fallback to global wrapper dir
+CANDIDATES=(
+  "$PREFIX/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe"
+  "$PREFIX/lib/node_modules/@anthropic-ai/claude-code/node_modules/@anthropic-ai/claude-code-linux-arm64/claude"
+)
+BIN=""
+for c in "${CANDIDATES[@]}"; do [ -x "$c" ] && { BIN="$c"; break; }; done
+if [ -z "$BIN" ]; then echo "claude: native binary not found. Run: npm install -g @anthropic-ai/claude-code" >&2; exit 1; fi
+# Align TMPDIR to Termux workaround (mirrors .bashrc)
+if [ -d "$PREFIX/tmp" ]; then
+  export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
+  export CLAUDE_CODE_TMPDIR="${CLAUDE_CODE_TMPDIR:-$TMPDIR}"
+fi
+# Cleanup LD_PRELOAD that breaks glibc binary
+unset LD_PRELOAD 2>/dev/null || true
+if [ -x "$LDSO" ]; then
+  exec "$LDSO" --library-path "$LIBPATH" "$BIN" "$@"
+else
+  exec "$BIN" "$@"
+fi
