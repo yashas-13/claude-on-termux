@@ -68,8 +68,9 @@ The repo ships a ready-to-go `settings.json` for an OpenAI-compatible proxy at `
 git clone https://github.com/yashas-13/claude-on-termux.git
 bash install.sh --dry-run   # print what would change
 bash install.sh             # actually install
+bash install.sh --test      # self-test (binary + auth)
 claude --version
-claude -p "Reply exactly: INSTALL_OK" --model oc
+claude -p "Reply exactly: INSTALL_OK"
 ```
 
 PRs welcome — especially device-specific quirks (Bionic vs glibc, `/proc/stat` SELinux, seccomp `lefthook`, etc.).

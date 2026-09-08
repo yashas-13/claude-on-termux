@@ -4,10 +4,10 @@ set -euo pipefail
 PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
 LDSO="$PREFIX/glibc/lib/ld-linux-aarch64.so.1"
 LIBPATH="$PREFIX/glibc/lib"
-# Prefer installed native bin; fallback to global wrapper dir
+# Native ELF first — .exe is a Node stub, not executable directly
 CANDIDATES=(
-  "$PREFIX/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe"
   "$PREFIX/lib/node_modules/@anthropic-ai/claude-code/node_modules/@anthropic-ai/claude-code-linux-arm64/claude"
+  "$PREFIX/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe"
 )
 BIN=""
 for c in "${CANDIDATES[@]}"; do [ -x "$c" ] && { BIN="$c"; break; }; done
